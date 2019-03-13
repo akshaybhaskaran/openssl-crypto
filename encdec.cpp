@@ -8,7 +8,7 @@
 using namespace std;
 
 int encrypt(unsigned char *plaintext, int plain_length, unsigned char *key, unsigned char *iv, unsigned char *ciphertext);
-
+int decrypt(unsigned char *ciphertext, int cipher_length, unsigned char *key, unsigned char *iv, unsigned char *plaintext);
 
 int main(void){
 
@@ -22,13 +22,13 @@ int main(void){
 
     //Calling the encrypt method
     cipher_length = encrypt(plaintext, strlen((char*)plaintext), key, iv, ciphertext);
-    cout << "Plaintext: " << plaintext << endl;
-    cout << "Ciphertext: " <<  ciphertext << endl;
+    cout << "Plaintext: \t" << plaintext << endl;
+    cout << "Ciphertext: \t" <<  ciphertext << endl;
 
     //Calling the decrypt method
-    //decrypted_length = decrypt(ciphertext, cipher_length, key, iv, decryptedtext);
-    //decryptedtext[decrypted_length] = '\0';
-    //cout << "Decrypted text is: " << decryptedtext;
+    decrypted_length = decrypt(ciphertext, cipher_length, key, iv, decryptedtext);
+    decryptedtext[decrypted_length] = '\0';
+    cout << "Decrypted text: " << decryptedtext << endl;
 
     return 0;
 }
@@ -69,6 +69,36 @@ int encrypt(unsigned char *plaintext, int plain_length, unsigned char *key, unsi
 
     return cipher_length;
 
+}
+
+int decrypt(unsigned char *ciphertext, int cipher_length, unsigned char *key, unsigned char *iv, unsigned char *plaintext){
+    EVP_CIPHER_CTX *ctx;
+    int len, plain_length;
+
+    //Step # 1 - Setup the context
+    if (!(ctx = EVP_CIPHER_CTX_new()))
+        handleErrors();
+
+    //Step # 2 - Initialize the decryption operation
+    if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv))
+        handleErrors();
+
+    //Step # 3 - Update the decryption operation
+    //Provide message to be decrypted - this can be called multiple times
+    if (1 != EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, cipher_length))
+        handleErrors();
+    plain_length = len;
+
+    //Step # 4 - Finalize the decryption
+    //Further plaintext bytes may be written
+    if ( 1!= EVP_DecryptFinal_ex(ctx, plaintext+len, &len))
+        handleErrors();
+    plain_length += len;
+
+    //Step # 5 - Clean up
+    EVP_CIPHER_CTX_free(ctx);
+
+    return plain_length;
 }
 
 
