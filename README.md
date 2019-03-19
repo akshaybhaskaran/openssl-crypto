@@ -1,7 +1,4 @@
 # openssl-crypto
-Basic crypto operations in C++ using the libcrypto library of OpenSSL
-
-# Cryptographic operations
 OpenSSL has a crypto library (libcrypto) API that allows us to perform basic crypto operations like encryption/decryption, signing/verification, message digests, and more. 
 
 # OpenSSL Wiki
