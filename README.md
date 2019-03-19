@@ -2,12 +2,7 @@
 Basic crypto operations in C++ using the libcrypto library of OpenSSL
 
 # Cryptographic operations
-The following cryptographic operations are possible with OpenSSL crypto library - libcrypto<br/>
-    	> Encryption and Decryption: Symmetric and Assymmetric<br/>
-	> Asymmetric Encryption and Decryption of an Envelope<br/>
-	> Message Digests<br/>
-	> Signing and Verifying (including MACs)<br/>
-	> Key agreement, and generation<br/>
+OpenSSL has a crypto library (libcrypto) API that allows us to perform basic crypto operations like encryption/decryption, signing/verification, message digests, and more. 
 
 # OpenSSL Wiki
 https://wiki.openssl.org/index.php/Main_Page
